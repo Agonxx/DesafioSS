@@ -1,0 +1,26 @@
+﻿@inherits LayoutComponentBase
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <h5>Rafael Santos</h5>
+
+            <a class="btn btn-primary" style="background-color: #0082ca;" href="https://www.linkedin.com/in/rafael-agon" role="button">
+                <img src="src/Linkedin.svg" />
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+
+            <a class="btn btn-primary" style="background-color: #333333;" href="https://github.com/Agonxx" role="button">
+                <img src="src/GitHub.svg" />
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>

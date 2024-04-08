@@ -1,0 +1,171 @@
+﻿@page "/desafio1"
+@using DesafiosSS.Shared.Enums
+@using DesafiosSS.Shared.Models.Conversor
+@using DesafiosSS.Shared.Utils
+
+<PageTitle>Conversor</PageTitle>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link @(ConversaoObj.TipoConversao == ETipoConversao.Distancia ? "active" : "")" @onclick="(() => ConversaoObj.TipoConversao = ETipoConversao.Distancia)" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Distância</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link @(ConversaoObj.TipoConversao == ETipoConversao.Peso ? "active" : "")" @onclick="(() => ConversaoObj.TipoConversao = ETipoConversao.Peso)" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Peso</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link @(ConversaoObj.TipoConversao == ETipoConversao.Temperatura ? "active" : "")" @onclick="(() => ConversaoObj.TipoConversao = ETipoConversao.Temperatura)" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Temperatura</button>
+    </li>
+</ul>
+<div class="tab-content" style="width:600px;margin:40px" id="myTabContent">
+    <div class="tab-pane fade @(ConversaoObj.TipoConversao == ETipoConversao.Distancia ? "show active" : "")" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <form>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <select id="inputState" @bind="DistanciaObj.TipoOriginal" class="form-select">
+                        @foreach (var item in ConversaoObj.ListDistancias)
+                        {
+                            <option>@item</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" id="inputCity" @bind-value="DistanciaObj.ValorOriginal" placeholder="Valor original">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <select id="inputState" @bind="DistanciaObj.TipoNovo" class="form-select">
+                        @foreach (var item in ConversaoObj.ListDistancias)
+                        {
+                            <option>@item</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" id="inputCity" readonly @bind-value="DistanciaObj.ValorNovo" placeholder="Valor Convertido">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="tab-pane fade @(ConversaoObj.TipoConversao == ETipoConversao.Peso ? "show active" : "")" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <form>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <select id="inputState" @bind="PesoObj.TipoOriginal" class="form-select">
+                        @foreach (var item in ConversaoObj.ListPesos)
+                        {
+                            <option>@item</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" id="inputCity" @bind-value="PesoObj.ValorOriginal" placeholder="Valor original">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <select id="inputState" @bind="PesoObj.TipoNovo" class="form-select">
+                        @foreach (var item in ConversaoObj.ListPesos)
+                        {
+                            <option>@item</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" id="inputCity" @bind-value="PesoObj.ValorNovo" readonly placeholder="Valor Convertido">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="tab-pane fade @(ConversaoObj.TipoConversao == ETipoConversao.Temperatura ? "show active" : "")" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+        <form>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <select id="inputState" @bind="TemperaturaObj.TipoOriginal" class="form-select">
+                        @foreach (var item in ConversaoObj.ListTemperaturas)
+                        {
+                            <option>@item</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" id="inputCity" @bind-value="TemperaturaObj.ValorOriginal" placeholder="Valor original">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <select id="inputState" @bind="TemperaturaObj.TipoNovo" class="form-select">
+                        @foreach (var item in ConversaoObj.ListTemperaturas)
+                        {
+                            <option>@item</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" id="inputCity" readonly @bind-value="TemperaturaObj.ValorNovo" placeholder="Valor Convertido">
+                </div>
+            </div>
+        </form>
+    </div>
+    <a class="btn btn-primary" role="button" @onclick="Converter">Converter</a>
+</div>
+
+@code {
+    private ConvPeso PesoObj { get; set; } = new();
+    private ConvDistancia DistanciaObj { get; set; } = new();
+    private ConvTemperatura TemperaturaObj { get; set; } = new();
+    private Conversao ConversaoObj { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+
+    private void Converter()
+    {
+        var a = ConversaoObj.TipoConversao switch
+        {
+            ETipoConversao.Distancia => ConvertDistancia(),
+            ETipoConversao.Peso => ConvertPeso(),
+            ETipoConversao.Temperatura => ConvertTemperatura(),
+            _ => false
+        };
+    }
+
+    private bool ConvertDistancia()
+    {
+        DistanciaObj.ValorNovo = DistanciaObj.TipoOriginal switch
+        {
+            EUnidadesDistancia.Metro => DistanciaUtils.ConverterMetro(DistanciaObj.ValorOriginal, DistanciaObj.TipoNovo),
+            EUnidadesDistancia.Quilometro => DistanciaUtils.ConverterQuilometro(DistanciaObj.ValorOriginal, DistanciaObj.TipoNovo),
+            EUnidadesDistancia.Milha => DistanciaUtils.ConverterMilha(DistanciaObj.ValorOriginal, DistanciaObj.TipoNovo),
+            _ => 0.0
+        };
+        return DistanciaObj.ValorNovo > 0;
+    }
+
+    private bool ConvertPeso()
+    {
+        PesoObj.ValorNovo = PesoObj.TipoOriginal switch
+        {
+            EUnidadesPeso.Grama => PesoUtils.ConverterGrama(PesoObj.ValorOriginal, PesoObj.TipoNovo),
+            EUnidadesPeso.Quilograma => PesoUtils.ConverterQuilograma(PesoObj.ValorOriginal, PesoObj.TipoNovo),
+            EUnidadesPeso.Tonelada => PesoUtils.ConverterTonelada(PesoObj.ValorOriginal, PesoObj.TipoNovo),
+            _ => 0.0
+        };
+        return DistanciaObj.ValorNovo > 0;
+    }
+    private bool ConvertTemperatura()
+    {
+        TemperaturaObj.ValorNovo = TemperaturaObj.TipoOriginal switch
+        {
+            EUnidadesTemperatura.Celsius => TemperaturaUtils.ConverterCelcius(TemperaturaObj.ValorOriginal, TemperaturaObj.TipoNovo),
+            EUnidadesTemperatura.Fahrenheit => TemperaturaUtils.ConverterFahrenheit(TemperaturaObj.ValorOriginal, TemperaturaObj.TipoNovo),
+            EUnidadesTemperatura.Kelvin => TemperaturaUtils.ConverterKelvin(TemperaturaObj.ValorOriginal, TemperaturaObj.TipoNovo),
+            _ => 0.0
+        };
+        return TemperaturaObj.ValorNovo > 0;
+    }
+}

@@ -1,0 +1,150 @@
+﻿@page "/desafio2"
+@using System.Text.Json
+@using DesafiosSS.Shared.Models
+
+@inject HttpClient _client
+@inject NavigationManager _navigation
+
+<PageTitle>Quiz</PageTitle>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+
+    <li class="nav-item" role="presentation">
+        <button class="nav-link @(QuizObj.AbaAtiva == 0 ? "active" : "")" @onclick="(() => QuizObj.AbaAtiva = 0)" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Inicio</button>
+    </li>
+
+    @foreach (var item in QuizObj.Perguntas)
+    {
+        <li class="nav-item" role="presentation">
+            <button class="nav-link @(QuizObj.AbaAtiva == item.Id ? "active" : "")" @onclick="(() => QuizObj.AbaAtiva = item.Id)" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">@item.Id</button>
+        </li>
+    }
+
+    @if (!QuizObj.Perguntas.Any(w => w.Votado == false))
+    {
+        <li class="nav-item" role="presentation">
+            <button class="nav-link @(QuizObj.AbaAtiva == 6 ? "active" : "")" @onclick="(() => QuizObj.AbaAtiva = 6)" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Resultado</button>
+        </li>
+    }
+
+</ul>
+
+<div class="tab-content" style="width:600px;margin:40px" id="myTabContent">
+
+    <div class="tab-pane fade @(QuizObj.AbaAtiva == 0 ? "show active" : "")" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <form>
+            <div class="row mb-3">
+                <p class="lead">
+                    Bem-vindo ao nosso quiz de conhecimentos gerais!
+                </p>
+
+                <p class="lead intro">
+                    Este quiz consiste em uma série de perguntas que abrangem uma variedade de tópicos e desafiarão seu conhecimento em diversas áreas. Cada pergunta tem cinco alternativas, mas apenas uma delas está correta.
+                </p>
+
+                <p class="lead intro">
+                    Sua tarefa é selecionar a alternativa que você acredita ser a correta para cada pergunta. Não se preocupe se você não souber a resposta de imediato, dê o seu melhor palpite!
+                </p>
+
+                <p class="lead intro">
+                    Após responder a todas as perguntas, o resultado do seu quiz será revelado, mostrando quantas respostas você acertou. Está pronto para testar seus conhecimentos? Vamos começar!
+                </p>
+            </div>
+        </form>
+        <button class="btn btn-primary" role="button" @onclick="(() => QuizObj.AbaAtiva = 1)">Começar</button>
+    </div>
+
+    @foreach (var item in QuizObj.Perguntas)
+    {
+        <div class="tab-pane fade @(item.Id == QuizObj.AbaAtiva ? "show active" : "")" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <form>
+                <div class="row mb-3">
+                    <p class="lead"> @item.Descricao </p>
+                </div>
+                <div class="row mb-3">
+                    @foreach (var alternativa in item.Alternativas)
+                    {
+                        <div class="form-check @(item.Votado && (item.AlternativaCorreta == alternativa ) ? "correta" : item.Votado ? "errada" : "")">
+                            <input class="form-check-input" @onclick="(() => item.AlternativaEscolhida = alternativa)" type="radio" name="flexRadioDefault" disabled="@item.Votado" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                @alternativa
+                            </label>
+                        </div>
+                    }
+                </div>
+            </form>
+
+            @if (item.Votado)
+            {
+                <button class="btn btn-primary" role="button" @onclick="(() => Avancar(item))">Próxima</button>
+            }
+            else
+            {
+                <button class="btn btn-primary" role="button" disabled="@string.IsNullOrEmpty(item.AlternativaEscolhida)" @onclick="(() => Votar(item))">Votar</button>
+            }
+        </div>
+    }
+
+    <div class="tab-pane fade @(QuizObj.AbaAtiva == 6 ? "show active" : "")" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <form>
+            <div class="row mb-3">
+                <p class="lead">
+                    Concluído!
+                </p>
+            </div>
+        </form>
+        <button class="btn btn-primary" role="button" @onclick="Recomecar">Tentar novamente</button>
+    </div>
+</div>
+@code {
+
+    private Quiz QuizObj { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        QuizObj = await BuscarQuiz();
+    }
+
+    private async Task<Quiz> BuscarQuiz()
+    {
+        var resposta = await _client.GetAsync(_navigation.BaseUri + "Quiz.json");
+        var jsonObj = await resposta.Content.ReadAsStringAsync();
+        var quiz = JsonSerializer.Deserialize<Quiz>(jsonObj);
+        return quiz;
+    }
+
+    private void Avancar(Pergunta pergunta)
+    {
+        if (!QuizObj.Perguntas.Any(w => w.Votado == false))
+            QuizObj.AbaAtiva = 6;
+        else if (QuizObj.AbaAtiva == 5)
+            QuizObj.AbaAtiva = QuizObj.Perguntas.Where(w => w.Votado == false).Select(w => w.Id).First();
+        else
+            QuizObj.AbaAtiva = pergunta.Id + 1;
+    }
+
+    private async Task Recomecar()
+    {
+        QuizObj = await BuscarQuiz();
+        StateHasChanged();
+    }
+
+    private void Votar(Pergunta pergunta)
+    {
+        pergunta.Votado = true;
+    }
+}
+
+<style>
+    .intro {
+        font-size: 18px;
+    }
+
+    .correta {
+        color: green;
+    }
+
+    .errada {
+        color: red;
+    }
+</style>

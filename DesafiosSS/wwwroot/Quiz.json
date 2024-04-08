@@ -1,0 +1,76 @@
+﻿{
+  "Nota": 0,
+  "Nome": "",
+  "Perguntas": [
+    {
+      "Id": 1,
+      "Votado": false,
+      "Descricao": "Qual é a capital do Brasil?",
+      "AlternativaEscolhida": "",
+      "AlternativaCorreta": "Brasília",
+      "Alternativas": [
+        "Rio de Janeiro",
+        "São Paulo",
+        "Brasília",
+        "Belo Horizonte",
+        "Salvador"
+      ]
+    },
+    {
+      "Id": 2,
+      "Votado": false,
+      "Descricao": "Qual é o animal terrestre mais rápido do mundo?",
+      "AlternativaEscolhida": "",
+      "AlternativaCorreta": "Guepardo",
+      "Alternativas": [
+        "Cavalo",
+        "Guepardo",
+        "Coelho",
+        "Leopardo",
+        "Gato"
+      ]
+    },
+    {
+      "Id": 3,
+      "Votado": false,
+      "Descricao": "Qual é a capital da França?",
+      "AlternativaEscolhida": "",
+      "AlternativaCorreta": "Paris",
+      "Alternativas": [
+        "Madri",
+        "Londres",
+        "Paris",
+        "Lisboa",
+        "Roma"
+      ]
+    },
+    {
+      "Id": 4,
+      "Votado": false,
+      "Descricao": "Quem pintou a 'Mona Lisa'?",
+      "AlternativaEscolhida": "",
+      "AlternativaCorreta": "Leonardo da Vinci",
+      "Alternativas": [
+        "Pablo Picasso",
+        "Leonardo da Vinci",
+        "Vincent van Gogh",
+        "Michelangelo",
+        "Pierre Auguste Renoir"
+      ]
+    },
+    {
+      "Id": 5,
+      "Votado": false,
+      "Descricao": "Quem foi a figura central na Proclamação da República?",
+      "AlternativaEscolhida": "",
+      "AlternativaCorreta": "Marechal Deodoro da Fonseca",
+      "Alternativas": [
+        "Tiradentes",
+        "Pero Vaz de Caminha",
+        "Pedro Álvares Cabral",
+        "Marechal Deodoro da Fonseca",
+        "José de Anchieta"
+      ]
+    }
+  ]
+}
